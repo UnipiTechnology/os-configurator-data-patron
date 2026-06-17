@@ -1,0 +1,2 @@
+# define block device 
+GPP=/dev/mmcblk2gp0

@@ -16,8 +16,6 @@
 				spi-max-frequency = <12000000>;
 				status = "okay";
 				modbus-address = <1>;
-				probe-always-succeeds = <0>;
-				allow-protocol-v2 = <1>;
 				#address-cells = <1>;
 				#size-cells = <0>;
 				iogroup1: iogroup1 {
@@ -72,6 +70,14 @@
 						#size-cells = <0>;
 						label-prefix = "unipi:green:sysled-x";
 					};
+					w1_gpio: w1-gpio {
+						compatible = "unipi,gpio-do";
+						ngpio = <1>;
+						value-coil = <1001>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "W1-VCC";
+					};
 				};
 			};
 		unipispi1: unipispi@1 {
@@ -80,8 +86,6 @@
 				spi-max-frequency = <6000000>;
 				status = "okay";
 				modbus-address = <2>;
-				probe-always-succeeds = <0>;
-				allow-protocol-v2 = <1>;
 				#address-cells = <1>;
 				#size-cells = <0>;
 				iogroup2: iogroup2 {
@@ -98,7 +102,7 @@
 						compatible = "unipi,gpio-di";
 						gpio-controller;
 						#gpio-cells = <2>;
-						gpio-line-names = "DI1_1","DI1_2","DI1_3","DI1_4";
+						gpio-line-names = "DI2_1","DI2_2","DI2_3","DI2_4";
 						ngpio = <4>;
 						value-reg = <0>;
 						debounce-reg = <1010>;
@@ -110,7 +114,7 @@
 						value-coil = <0>;
 						gpio-controller;
 						#gpio-cells = <2>;
-						gpio-line-names = "RO1_1","RO1_2","RO1_3","RO1_4","RO1_5";
+						gpio-line-names = "RO2_1","RO2_2","RO2_3","RO2_4","RO2_5";
 					};
 					ai_chip {
 						compatible = "unipi,ai";
@@ -136,8 +140,6 @@
 				spi-max-frequency = <12000000>;
 				status = "okay";
 				modbus-address = <3>;
-				probe-always-succeeds = <0>;
-				allow-protocol-v2 = <1>;
 				#address-cells = <1>;
 				#size-cells = <0>;
 				iogroup3: iogroup3 {
@@ -154,7 +156,7 @@
 						compatible = "unipi,gpio-di";
 						gpio-controller;
 						#gpio-cells = <2>;
-						gpio-line-names = "DI2_1","DI2_2","DI2_3","DI2_4","DI2_5","DI2_6","DI2_7","DI2_8","DI2_9","DI2_10","DI2_11","DI2_12","DI2_13","DI2_14","DI2_15","DI2_16";
+						gpio-line-names = "DI3_1","DI3_2","DI3_3","DI3_4","DI3_5","DI3_6","DI3_7","DI3_8","DI3_9","DI3_10","DI3_11","DI3_12","DI3_13","DI3_14","DI3_15","DI3_16";
 						ngpio = <16>;
 						value-reg = <0>;
 						debounce-reg = <1010>;
@@ -166,7 +168,7 @@
 						value-coil = <0>;
 						gpio-controller;
 						#gpio-cells = <2>;
-						gpio-line-names = "RO2_1","RO2_2","RO2_3","RO2_4","RO2_5","RO2_6","RO2_7","RO2_8","RO2_9","RO2_10","RO2_11","RO2_12","RO2_13","RO2_14";
+						gpio-line-names = "RO3_1","RO3_2","RO3_3","RO3_4","RO3_5","RO3_6","RO3_7","RO3_8","RO3_9","RO3_10","RO3_11","RO3_12","RO3_13","RO3_14";
 					};
 				};
 			};
@@ -179,15 +181,33 @@
 		__overlay__ {
 			#address-cells = <1>;
 			#size-cells = <0>;
-			usbslot1@1 {
+			usbslot1: usbslot1@1 {
 				reg = <1>;
 			};
 		};
 	};
-	fragment@5 {
-		target = <&w1master>;
+	fragment@13 {
+		target-path = "/";
 		__overlay__ {
-			status = "okay";
+			reg_w1bus: regulator-w1bus {
+				compatible = "regulator-fixed";
+				regulator-name = "w1-vcc";
+				regulator-min-microvolt = <5000000>;
+				regulator-max-microvolt = <5000000>;
+				gpios = <&w1_gpio 0 0>;
+				startup-delay-us = <100000>;
+			};
+		};
+	};
+	fragment@14 {
+		target = <&i2c3>;
+		__overlay__ {
+			w1master:w1master@18 {
+				compatible = "maxim,ds2482";
+				reg = <0x18>;
+				status = "okay";
+				vcc-supply = <&reg_w1bus>;
+			};
 		};
 	};
 
@@ -223,9 +243,9 @@
 
 &iogroup3 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_slotirq2>; 
-	interrupt-parent = <&gpio4>;
-	interrupts = <30 1>; /* EDGE RISING*/
+	pinctrl-0 = <&pinctrl_slotirq1>; /* swapped INT1 and INT2 */
+	interrupt-parent = <&gpio5>;
+	interrupts = <20 1>; /* EDGE RISING*/
 };
 
 

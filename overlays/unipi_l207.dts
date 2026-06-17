@@ -16,8 +16,6 @@
 				spi-max-frequency = <12000000>;
 				status = "okay";
 				modbus-address = <1>;
-				probe-always-succeeds = <0>;
-				allow-protocol-v2 = <1>;
 				#address-cells = <1>;
 				#size-cells = <0>;
 				iogroup1: iogroup1 {
@@ -72,6 +70,14 @@
 						#size-cells = <0>;
 						label-prefix = "unipi:green:sysled-x";
 					};
+					w1_gpio: w1-gpio {
+						compatible = "unipi,gpio-do";
+						ngpio = <1>;
+						value-coil = <1001>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "W1-VCC";
+					};
 				};
 			};
 		unipispi1: unipispi@1 {
@@ -80,52 +86,10 @@
 				spi-max-frequency = <12000000>;
 				status = "okay";
 				modbus-address = <2>;
-				probe-always-succeeds = <0>;
-				allow-protocol-v2 = <1>;
 				#address-cells = <1>;
 				#size-cells = <0>;
 				iogroup2: iogroup2 {
 					reg = <2>;
-					compatible = "unipi,unipi-mfd", "iogroup";
-					fw_variant = <0x0810>;
-					fw_name = "E-16Di_U-14Ro-1";
-					board_name = "E-16Di_U-14Ro-1";
-					sys_board_name = "E_16Di_U_14Ro";
-					cycle_counter = <1031>;
-					master_watchdog_enable = <2>;
-
-					di {
-						compatible = "unipi,gpio-di";
-						gpio-controller;
-						#gpio-cells = <2>;
-						gpio-line-names = "DI1_1","DI1_2","DI1_3","DI1_4","DI1_5","DI1_6","DI1_7","DI1_8","DI1_9","DI1_10","DI1_11","DI1_12","DI1_13","DI1_14","DI1_15","DI1_16";
-						ngpio = <16>;
-						value-reg = <0>;
-						debounce-reg = <1010>;
-						counter-reg = <3>;
-					};
-					do {
-						compatible = "unipi,gpio-ro";
-						ngpio = <14>;
-						value-coil = <0>;
-						gpio-controller;
-						#gpio-cells = <2>;
-						gpio-line-names = "RO1_1","RO1_2","RO1_3","RO1_4","RO1_5","RO1_6","RO1_7","RO1_8","RO1_9","RO1_10","RO1_11","RO1_12","RO1_13","RO1_14";
-					};
-				};
-			};
-		unipispi2: unipispi@2 {
-				compatible = "unipispi";
-				reg = <2>;
-				spi-max-frequency = <12000000>;
-				status = "okay";
-				modbus-address = <3>;
-				probe-always-succeeds = <0>;
-				allow-protocol-v2 = <1>;
-				#address-cells = <1>;
-				#size-cells = <0>;
-				iogroup3: iogroup3 {
-					reg = <3>;
 					compatible = "unipi,unipi-mfd", "iogroup";
 					fw_variant = <0x0810>;
 					fw_name = "E-16Di_U-14Ro-1";
@@ -154,6 +118,44 @@
 					};
 				};
 			};
+		unipispi2: unipispi@2 {
+				compatible = "unipispi";
+				reg = <2>;
+				spi-max-frequency = <12000000>;
+				status = "okay";
+				modbus-address = <3>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup3: iogroup3 {
+					reg = <3>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					fw_variant = <0x0810>;
+					fw_name = "E-16Di_U-14Ro-1";
+					board_name = "E-16Di_U-14Ro-1";
+					sys_board_name = "E_16Di_U_14Ro";
+					cycle_counter = <1031>;
+					master_watchdog_enable = <2>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI3_1","DI3_2","DI3_3","DI3_4","DI3_5","DI3_6","DI3_7","DI3_8","DI3_9","DI3_10","DI3_11","DI3_12","DI3_13","DI3_14","DI3_15","DI3_16";
+						ngpio = <16>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <3>;
+					};
+					do {
+						compatible = "unipi,gpio-ro";
+						ngpio = <14>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "RO3_1","RO3_2","RO3_3","RO3_4","RO3_5","RO3_6","RO3_7","RO3_8","RO3_9","RO3_10","RO3_11","RO3_12","RO3_13","RO3_14";
+					};
+				};
+			};
 		
 		};
 	};
@@ -163,15 +165,33 @@
 		__overlay__ {
 			#address-cells = <1>;
 			#size-cells = <0>;
-			usbslot1@1 {
+			usbslot1: usbslot1@1 {
 				reg = <1>;
 			};
 		};
 	};
-	fragment@5 {
-		target = <&w1master>;
+	fragment@13 {
+		target-path = "/";
 		__overlay__ {
-			status = "okay";
+			reg_w1bus: regulator-w1bus {
+				compatible = "regulator-fixed";
+				regulator-name = "w1-vcc";
+				regulator-min-microvolt = <5000000>;
+				regulator-max-microvolt = <5000000>;
+				gpios = <&w1_gpio 0 0>;
+				startup-delay-us = <100000>;
+			};
+		};
+	};
+	fragment@14 {
+		target = <&i2c3>;
+		__overlay__ {
+			w1master:w1master@18 {
+				compatible = "maxim,ds2482";
+				reg = <0x18>;
+				status = "okay";
+				vcc-supply = <&reg_w1bus>;
+			};
 		};
 	};
 
@@ -205,18 +225,18 @@
 
 &iogroup2 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_slotirq1>; 
-	interrupt-parent = <&gpio5>;
-	interrupts = <20 1>; /* EDGE RISING*/
+	pinctrl-0 = <&pinctrl_slotirq2>; /* swapped INT1 and INT2 */
+	interrupt-parent = <&gpio4>;
+	interrupts = <30 1>; /* EDGE RISING*/
 };
 
 
 
 &iogroup3 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_slotirq2>; 
-	interrupt-parent = <&gpio4>;
-	interrupts = <30 1>; /* EDGE RISING*/
+	pinctrl-0 = <&pinctrl_slotirq1>; /* swapped INT1 and INT2 */
+	interrupt-parent = <&gpio5>;
+	interrupts = <20 1>; /* EDGE RISING*/
 };
 
 

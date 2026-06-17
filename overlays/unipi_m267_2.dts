@@ -176,15 +176,18 @@
 		target-path = "/";
 		__overlay__ {
 			lte_kill1 {
+				/* Timing is for Quectel EG-915U */
 				compatible = "unipi,rfkill-quectel912";
 				type = "wwan";
-				algo = "pulse";
 				reset-gpio = <&gpio3 20 0>;
 				rfkill-gpio = <&gpio5 21 0>;
 				monitor-usb = "usbslot1";
+				start-pulse-ms = <2050>;
+				stop-pulse-ms = <3050>;
+				reset-pulse-ms = <150>;
 			};
 		};
-	};
+	}; 
 
 };
 

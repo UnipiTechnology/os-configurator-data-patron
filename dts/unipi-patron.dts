@@ -14,12 +14,9 @@
 	model = "UniPi Patron board (Unipi Zulu, i.MX8MM)";
 	/*model = "UniPi Zulu board (i.MX8MN)"; */
 
-	unipi_id: unipi-id {
-        compatible = "unipi,unipi-id";
-        nvmem = <&unipi_mb>;
-        nvmem-names = "plcid0";
-        id-channel = <&i2c3>;
-    };
+	aliases {
+		unipi-mb = &unipi_mb;
+	};
 };
 
 &uart1 {
@@ -64,15 +61,10 @@
             */
     };
 
-    w1master:w1master@18 {
-             compatible = "ds2482";
-             reg = <0x18>;
-             status = "disabled";
-    };
-
     unipi_mb:24c01@57 {
         compatible = "atmel,24c01";
         reg = <0x57>;
+        read-only;
         status = "okay";
     };
 };

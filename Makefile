@@ -5,8 +5,8 @@ LINUX_BUILD_PATH = /lib/modules/$(shell uname -r)/build
 INSTALL = install
 PWD = $(shell pwd)
 OVERLAY_DEST_DIR = /boot/overlays
-UDEV_DEST_DIR = /opt/unipi/os-configurator/udev
-LIB_DEST_DIR = /opt/unipi/os-configurator
+UDEV_DEST_DIR = /usr/share/unipi-os-configurator/udev
+LIB_DEST_DIR = /usr/lib/unipi
 
 
 all: overlays dts
@@ -27,6 +27,7 @@ $(LINUX_BUILD_PATH)/Module.symvers:
 
 
 install: install-dtb install-udev install-overlays unipi_values.py
+	$(INSTALL) -d $(DESTDIR)/$(LIB_DEST_DIR)
 	$(INSTALL) -m 644 unipi_values.py $(DESTDIR)/$(LIB_DEST_DIR)
 	cp -r files/* $(DESTDIR)
 

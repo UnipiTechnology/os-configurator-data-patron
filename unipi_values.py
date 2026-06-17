@@ -39,7 +39,10 @@ products = {
   '2311': Product(2311, 'M567', dt='unipi_m567' , udev='m567' , has_ds2482='1' , has_lte='1' ),
   '2567': Product(2567, 'S167', dt='unipi_s167' , udev='s167' , has_ds2482='1' , has_lte='1' ),
   '2823': Product(2823, 'S227', dt='unipi_s227' , udev='s227' ),
-  '3079': Product(3079, 'AKUZU1', dt='unipi_akuzu1' , udev='akuzu1' , has_watchdog1='1' ),
+  '3335': Product(3335, 'S167_2', dt='unipi_s167_2' , udev='s167_2' , has_ds2482='1' , has_lte='1' ),
+  '3591': Product(3591, 'M267_2', dt='unipi_m267_2' , udev='m267_2' , has_ds2482='1' , has_lte='1' ),
+  '3847': Product(3847, 'M567_2', dt='unipi_m567_2' , udev='m567_2' , has_ds2482='1' , has_lte='1' ),
+  '4103': Product(4103, 'M537', dt='unipi_m537' , udev='m537' , has_ds2482='1' ),
 }
 
 boards = {
@@ -57,7 +60,7 @@ family = {
   '2': 'G1XX',
   '3': 'NEURON',
   '5': 'AXON',
-  '6': 'CM40',
+  '6': 'EDGE',
   '7': 'PATRON',
   '15': 'IRIS',
   '16': 'OEM',
