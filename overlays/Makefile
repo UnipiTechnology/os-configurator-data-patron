@@ -1,4 +1,4 @@
-
+dtss += unipi_finaltest.dts
 dtss += unipi_s107.dts
 dtss += unipi_s117.dts
 dtss += unipi_s167.dts

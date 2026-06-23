@@ -2,7 +2,7 @@ Source: unipi-os-configurator-data
 Section: unknown
 Priority: optional
 Maintainer: Miroslav Ondra <ondra@unipi.technology>
-Build-Depends: debhelper (>= 10)
+Build-Depends: debhelper (>= 13), debhelper-compat (= 13)
 Standards-Version: 3.9.8.0
 Homepage: https://www.unipi.technology/
 Vcs-Git: https://github.com/UnipiTechnology/os-configurator-data-patron.git

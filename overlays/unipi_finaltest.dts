@@ -1,0 +1,91 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2026 Unipi Technology
+ */
+
+/dts-v1/;
+/plugin/;
+/ {
+	compatible = "unipi,zulu";
+	fragment@0 {
+		target = <&ecspi3>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			unipispi0: unipispi@0 {
+				compatible = "unipispi";
+				reg = <0>;
+				modbus-address = <1>;
+				status = "okay";
+				probe-always-succeeds = <1>;
+				spi-max-frequency = <6000000>;
+			};
+			unipispi1: unipispi@1 {
+				compatible = "unipispi";
+				reg = <1>;
+				modbus-address = <2>;
+				status = "okay";
+				probe-always-succeeds = <1>;
+				spi-max-frequency = <6000000>;
+			};
+			unipispi2: unipispi@2 {
+				compatible = "unipispi";
+				reg = <2>;
+				modbus-address = <3>;
+				status = "okay";
+				probe-always-succeeds = <1>;
+				spi-max-frequency = <6000000>;
+			};
+		};
+	};
+	fragment@1 {
+		target = <&usbotg1>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			usbslot1: usbslot1@1 {
+				reg = <1>;
+			};
+		};
+	};
+	fragment@2 {
+		target-path = "/";
+		__overlay__ {
+			lte_kill1 {
+				/* Timing is for Quectel EG-915U */
+				compatible = "unipi,rfkill-quectel912";
+				type = "wwan";
+				reset-gpio = <&gpio3 20 0>;
+				rfkill-gpio = <&gpio5 21 0>;
+				monitor-usb = "usbslot1";
+				start-pulse-ms = <2050>;
+				stop-pulse-ms = <3050>;
+				reset-pulse-ms = <150>;
+			};
+		};
+	};
+	fragment@3 {
+		target = <&ecspi1>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			fsl,spi-num-chipselects = <0>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_ecspi1>;
+			cs-gpios = <&gpio5 9 1>;
+			status = "okay";
+			spiflash0: spiflash@0 {
+				compatible = "jedec,spi-nor";
+				reg = <0>;
+				status = "okay";
+				spi-max-frequency = <40000000>;
+			};
+		};
+	};
+};
+/*
+&unipi_mb {
+    /delete-property/ read-only;
+};
+*/
+

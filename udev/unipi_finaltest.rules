@@ -1,0 +1,20 @@
+
+ACTION=="add|remove", SUBSYSTEM=="w1", DEVPATH=="/devices/w1_bus_master1",  RUN+="/usr/lib/unipi/uhelper '' w1 1 $name"
+
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x1",  RUN+="/usr/lib/unipi/uhelper '' ULED1.1 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x2",  RUN+="/usr/lib/unipi/uhelper '' ULED1.2 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x3",  RUN+="/usr/lib/unipi/uhelper '' ULED1.3 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x4",  RUN+="/usr/lib/unipi/uhelper '' ULED1.4 1 $name"
+
+## rfkill+wwan
+ACTION=="add|remove", SUBSYSTEM=="net", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.0/net/*", RUN+="/usr/lib/unipi/uhelper lte.1 net  1 $name", NAME="wwan0"
+ACTION=="add|remove", SUBSYSTEM=="rfkill", DEVPATH=="/devices/platform/lte_kill1/rfkill/rfkill0", RUN+="/usr/lib/unipi/uhelper lte.1 rfkill  1 $name"
+## 2c7c:6001 - EG912YE
+ACTION=="add|remove", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6001", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.4/tty*",  RUN+="/usr/lib/unipi/uhelper lte.1 tty_mng 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6001", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.3/tty*",  RUN+="/usr/lib/unipi/uhelper lte.1 tty_at1 1 $name"
+## 2c7c:6002 - EG912YEUAD
+ACTION=="add|remove", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6002", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.4/tty*",  RUN+="/usr/lib/unipi/uhelper lte.1 tty_mng 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6002", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.3/tty*",  RUN+="/usr/lib/unipi/uhelper lte.1 tty_at1 1 $name"
+## 2c7c:901 - EG915
+ACTION=="add|remove", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0901", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.8/tty*",  RUN+="/usr/lib/unipi/uhelper lte.1 tty_mng 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0901", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.2/tty*",  RUN+="/usr/lib/unipi/uhelper lte.1 tty_at1 1 $name"

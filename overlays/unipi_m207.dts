@@ -148,6 +148,8 @@
 	fragment@14 {
 		target = <&i2c3>;
 		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
 			w1master:w1master@18 {
 				compatible = "maxim,ds2482";
 				reg = <0x18>;
