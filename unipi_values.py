@@ -52,6 +52,10 @@ boards = {
   '7': Board(7, 'N_1000_1', None),
   '8': Board(8, 'N_1001_1', None),
   '9': Board(9, 'N_1002_1', None),
+  '10': Board(10, 'I_1000_1', None),
+  '11': Board(11, 'I_1003_1', None),
+  '12': Board(12, 'I_1006_3', None),
+  '13': Board(13, 'I_1006_4', None),
 }
 
 # Family names

@@ -13,7 +13,7 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 			unipispi0: unipispi@0 {
-				compatible = "unipispi";
+				compatible = "unipi,unipi-spi";
 				reg = <0>;
 				modbus-address = <1>;
 				status = "okay";
@@ -21,7 +21,7 @@
 				spi-max-frequency = <6000000>;
 			};
 			unipispi1: unipispi@1 {
-				compatible = "unipispi";
+				compatible = "unipi,unipi-spi";
 				reg = <1>;
 				modbus-address = <2>;
 				status = "okay";
@@ -29,7 +29,7 @@
 				spi-max-frequency = <6000000>;
 			};
 			unipispi2: unipispi@2 {
-				compatible = "unipispi";
+				compatible = "unipi,unipi-spi";
 				reg = <2>;
 				modbus-address = <3>;
 				status = "okay";
